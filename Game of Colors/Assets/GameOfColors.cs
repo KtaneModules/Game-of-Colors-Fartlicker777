@@ -107,12 +107,13 @@ public class GameOfColors : MonoBehaviour {
       Buttons[19].GetComponent<MeshRenderer>().material = Colors[1];
       Buttons[21].GetComponent<MeshRenderer>().material = Colors[1];
       Buttons[23].GetComponent<MeshRenderer>().material = Colors[1];
-      yield return new WaitForSeconds(.3f);
+      Audio.PlaySoundAtTransform("Strike", transform);
+      yield return new WaitForSeconds(.4f);
       for (int j = 0; j < 3; j++) {
          for (int i = 0; i < 25; i++) {
             Buttons[i].GetComponent<MeshRenderer>().material = Colors[0];
          }
-         yield return new WaitForSeconds(.3f);
+         yield return new WaitForSeconds(.4f);
          Buttons[0].GetComponent<MeshRenderer>().material = Colors[1];
          Buttons[4].GetComponent<MeshRenderer>().material = Colors[1];
          Buttons[7].GetComponent<MeshRenderer>().material = Colors[1];
@@ -134,7 +135,9 @@ public class GameOfColors : MonoBehaviour {
          Buttons[8].GetComponent<MeshRenderer>().material = Colors[1];
          Buttons[16].GetComponent<MeshRenderer>().material = Colors[1];
          Buttons[18].GetComponent<MeshRenderer>().material = Colors[1];
-         yield return new WaitForSeconds(.3f);
+         Audio.PlaySoundAtTransform("Strike", transform);
+         yield return new WaitForSeconds(.4f);
+
       }
       GetComponent<KMBombModule>().HandleStrike();
       Buttons[0].GetComponent<MeshRenderer>().material = Colors[0];
@@ -262,6 +265,7 @@ public class GameOfColors : MonoBehaviour {
       yield return new WaitForSeconds(.1f);
       Buttons[15].GetComponent<MeshRenderer>().material = Colors[2];
       Buttons[10].GetComponent<MeshRenderer>().material = Colors[2];
+      Audio.PlaySoundAtTransform("Solve", transform);
       yield return new WaitForSeconds(.3f);
       
       GetComponent<KMBombModule>().HandlePass();
@@ -271,6 +275,7 @@ public class GameOfColors : MonoBehaviour {
    }
 
    void ArrowPress (KMSelectable Arrow) {
+      Audio.PlaySoundAtTransform("ChangeColor", transform);
       if (Arrow == Arrows[0]) {
          ColorIndex++;
          ColorIndex %= 8;
@@ -364,6 +369,7 @@ public class GameOfColors : MonoBehaviour {
    }
 
    void ButtonPress (KMSelectable Button) {
+      Audio.PlaySoundAtTransform("Boop", transform);
       for (int i = 0; i < 25; i++) {
          if (Button == Buttons[i]) {
             Submission[i] = ColorIndex;
@@ -491,7 +497,7 @@ public class GameOfColors : MonoBehaviour {
          }
       }
       Submit.OnInteract();
-      while (!solved)
+      while (!moduleSolved)
          yield return true;
    }
 }
