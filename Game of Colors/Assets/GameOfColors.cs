@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using KModkit;
-using NUnit.Framework;
 using Rnd = UnityEngine.Random;
 
 public class GameOfColors : MonoBehaviour {
