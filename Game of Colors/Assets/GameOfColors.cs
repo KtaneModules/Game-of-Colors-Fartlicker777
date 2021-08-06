@@ -42,7 +42,6 @@ public class GameOfColors : MonoBehaviour {
    int ColorIndex;
    //bool CMYK;
    bool Animating;
-   bool solved;
 
    private static readonly Regex tpRegex = new Regex("^((([abcde][12345])|[krgbcmyw])( |$))+$");
 
@@ -62,6 +61,9 @@ public class GameOfColors : MonoBehaviour {
    }
 
    void SubmitPress () {
+      if (moduleSolved) {
+         return;
+      }
       //StartCoroutine(Solve());
       //return;
       for (int i = 0; i < 25; i++) {
@@ -246,55 +248,25 @@ public class GameOfColors : MonoBehaviour {
       Animating = true;
       StartCoroutine(Clear());
       yield return new WaitForSeconds(1f);
-      Buttons[12].GetComponent<MeshRenderer>().material = Colors[2];
-      yield return new WaitForSeconds(.1f);
-      Buttons[11].GetComponent<MeshRenderer>().material = Colors[2];
-      Buttons[13].GetComponent<MeshRenderer>().material = Colors[2];
-      Buttons[16].GetComponent<MeshRenderer>().material = Colors[2];
-      Buttons[17].GetComponent<MeshRenderer>().material = Colors[2];
-      yield return new WaitForSeconds(.1f);
-      Buttons[10].GetComponent<MeshRenderer>().material = Colors[2];
-      Buttons[8].GetComponent<MeshRenderer>().material = Colors[2];
-      yield return new WaitForSeconds(.1f);
-      Buttons[5].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[4].GetComponent<MeshRenderer>().material = Colors[2];
       Buttons[9].GetComponent<MeshRenderer>().material = Colors[2];
       yield return new WaitForSeconds(.1f);
-      Buttons[4].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[8].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[13].GetComponent<MeshRenderer>().material = Colors[2];
+      yield return new WaitForSeconds(.1f);
+      Buttons[12].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[17].GetComponent<MeshRenderer>().material = Colors[2];
+      yield return new WaitForSeconds(.1f);
+      Buttons[16].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[21].GetComponent<MeshRenderer>().material = Colors[2];
+      yield return new WaitForSeconds(.1f);
+      Buttons[15].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[10].GetComponent<MeshRenderer>().material = Colors[2];
       yield return new WaitForSeconds(.3f);
-      for (int j = 0; j < 3; j++) {
-         for (int i = 0; i < 25; i++) {
-            Buttons[i].GetComponent<MeshRenderer>().material = Colors[0];
-         }
-         yield return new WaitForSeconds(.3f);
-         Buttons[12].GetComponent<MeshRenderer>().material = Colors[2];
-         Buttons[11].GetComponent<MeshRenderer>().material = Colors[2];
-         Buttons[13].GetComponent<MeshRenderer>().material = Colors[2];
-         Buttons[16].GetComponent<MeshRenderer>().material = Colors[2];
-         Buttons[17].GetComponent<MeshRenderer>().material = Colors[2];
-         Buttons[10].GetComponent<MeshRenderer>().material = Colors[2];
-         Buttons[8].GetComponent<MeshRenderer>().material = Colors[2];
-         Buttons[5].GetComponent<MeshRenderer>().material = Colors[2];
-         Buttons[9].GetComponent<MeshRenderer>().material = Colors[2];
-         Buttons[4].GetComponent<MeshRenderer>().material = Colors[2];
-         yield return new WaitForSeconds(.3f);
-      }
+      
       GetComponent<KMBombModule>().HandlePass();
-      solved = true;
-      Buttons[5].GetComponent<MeshRenderer>().material = Colors[0];
-      yield return new WaitForSeconds(.1f);
-      Buttons[10].GetComponent<MeshRenderer>().material = Colors[0];
-      yield return new WaitForSeconds(.1f);
-      Buttons[11].GetComponent<MeshRenderer>().material = Colors[0];
-      yield return new WaitForSeconds(.1f);
-      Buttons[4].GetComponent<MeshRenderer>().material = Colors[0];
-      Buttons[8].GetComponent<MeshRenderer>().material = Colors[0];
-      Buttons[12].GetComponent<MeshRenderer>().material = Colors[0];
-      Buttons[16].GetComponent<MeshRenderer>().material = Colors[0];
-      yield return new WaitForSeconds(.1f);
-      Buttons[9].GetComponent<MeshRenderer>().material = Colors[0];
-      Buttons[13].GetComponent<MeshRenderer>().material = Colors[0];
-      Buttons[17].GetComponent<MeshRenderer>().material = Colors[0];
-      yield return new WaitForSeconds(.1f);
+      StartCoroutine(Clear());
+      moduleSolved = true;
       Animating = false;
    }
 
@@ -349,7 +321,7 @@ public class GameOfColors : MonoBehaviour {
       }
       //}
       for (int i = 0; i < 3; i++) {
-         Debug.LogFormat("[Game of Color #{0}] The grid for {1} is:", moduleId, true ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
+         Debug.LogFormat("[Game of Color #{0}] The grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
          Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][0] ? "*" : ".", GOLGrids[i][1] ? "*" : ".", GOLGrids[i][2] ? "*" : ".", GOLGrids[i][3] ? "*" : ".", GOLGrids[i][4] ? "*" : ".");
          Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][5] ? "*" : ".", GOLGrids[i][6] ? "*" : ".", GOLGrids[i][7] ? "*" : ".", GOLGrids[i][8] ? "*" : ".", GOLGrids[i][9] ? "*" : ".");
          Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][10] ? "*" : ".", GOLGrids[i][11] ? "*" : ".", GOLGrids[i][12] ? "*" : ".", GOLGrids[i][13] ? "*" : ".", GOLGrids[i][14] ? "*" : ".");
@@ -360,7 +332,7 @@ public class GameOfColors : MonoBehaviour {
          GOLIteration(5, 5, i);
       }
       for (int i = 0; i < 3; i++) {
-         Debug.LogFormat("[Game of Color #{0}] The goal grid for {1} is:", moduleId, true ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
+         Debug.LogFormat("[Game of Color #{0}] The goal grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
          Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][0] ? "*" : ".", Goal[i][1] ? "*" : ".", Goal[i][2] ? "*" : ".", Goal[i][3] ? "*" : ".", Goal[i][4] ? "*" : ".");
          Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][5] ? "*" : ".", Goal[i][6] ? "*" : ".", Goal[i][7] ? "*" : ".", Goal[i][8] ? "*" : ".", Goal[i][9] ? "*" : ".");
          Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][10] ? "*" : ".", Goal[i][11] ? "*" : ".", Goal[i][12] ? "*" : ".", Goal[i][13] ? "*" : ".", Goal[i][14] ? "*" : ".");

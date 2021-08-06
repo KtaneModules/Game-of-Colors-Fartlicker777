@@ -11,10 +11,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
   m_Name: ModConfig
   m_EditorClassIdentifier: 
-  id: template
-  title: Template
-  author: 
-  description: A decision is never white or black.
+  id: GameOfColors
+  title: Game of Colors
+  author: me
+  description: 'A decision is never white or black.
+
+
+    Split each channel into its CMYK components and perform an iteration of Game of
+    Life on all three.
+
+
+    Twitch Plays support by Marksam.
+
+
+    Manual can be found at ktane.timwi.de or in the manuals folder of your game.
+
+
+    If there are any bugs, contact Fartlicker777#9169 on Discord.'
   version: 
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: 9d3aa0b24d915804ea3d54a6cce1a8ca, type: 3}
