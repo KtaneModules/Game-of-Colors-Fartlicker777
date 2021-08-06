@@ -23,23 +23,28 @@ public class GameOfColors : MonoBehaviour {
    int moduleId;
    private bool moduleSolved;
 
-   int[] Grid = new int[25];
-   bool[][] GOLGrids = new bool[][] {
+   readonly int[] Grid = new int[25];
+
+   readonly bool[][] GOLGrids = new bool[][] {
       new bool[25],
       new bool[25],
       new bool[25]
    };
 
-   bool[][] Goal = new bool[][] {
+   readonly bool[][] Goal = new bool[][] {
       new bool[25],
       new bool[25],
       new bool[25]
    };
-   int[] FinalAnswer = new int[25];
-   int[] Submission = new int[25];
+
+   readonly int[] FinalAnswer = new int[25];
+   readonly int[] Submission = new int[25];
    int ColorIndex;
    //bool CMYK;
    bool Animating;
+   bool solved;
+
+   private static readonly Regex tpRegex = new Regex("^((([abcde][12345])|[krgbcmyw])( |$))+$");
 
    void Awake () {
       moduleId = moduleIdCounter++;
@@ -71,11 +76,10 @@ public class GameOfColors : MonoBehaviour {
       StartCoroutine(Solve());
    }
 
-   IEnumerator Strike () {
+   IEnumerator Strike ()
+   {
+      Animating = true;
       StartCoroutine(Clear());
-      while (Animating) {
-         yield return null;
-      }
       yield return new WaitForSeconds(1f);
       Buttons[12].GetComponent<MeshRenderer>().material = Colors[1];
       yield return new WaitForSeconds(.1f);
@@ -198,6 +202,7 @@ public class GameOfColors : MonoBehaviour {
       Buttons[23].GetComponent<MeshRenderer>().material = Colors[7 - Grid[23]];
       yield return new WaitForSeconds(.1f);
       Buttons[24].GetComponent<MeshRenderer>().material = Colors[7 - Grid[24]];
+      Animating = false;
    }
 
    IEnumerator Clear () {
@@ -238,11 +243,59 @@ public class GameOfColors : MonoBehaviour {
    }
 
    IEnumerator Solve () {
+      Animating = true;
       StartCoroutine(Clear());
-      while (Animating) {
-         yield return null;
+      yield return new WaitForSeconds(1f);
+      Buttons[12].GetComponent<MeshRenderer>().material = Colors[2];
+      yield return new WaitForSeconds(.1f);
+      Buttons[11].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[13].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[16].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[17].GetComponent<MeshRenderer>().material = Colors[2];
+      yield return new WaitForSeconds(.1f);
+      Buttons[10].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[8].GetComponent<MeshRenderer>().material = Colors[2];
+      yield return new WaitForSeconds(.1f);
+      Buttons[5].GetComponent<MeshRenderer>().material = Colors[2];
+      Buttons[9].GetComponent<MeshRenderer>().material = Colors[2];
+      yield return new WaitForSeconds(.1f);
+      Buttons[4].GetComponent<MeshRenderer>().material = Colors[2];
+      yield return new WaitForSeconds(.3f);
+      for (int j = 0; j < 3; j++) {
+         for (int i = 0; i < 25; i++) {
+            Buttons[i].GetComponent<MeshRenderer>().material = Colors[0];
+         }
+         yield return new WaitForSeconds(.3f);
+         Buttons[12].GetComponent<MeshRenderer>().material = Colors[2];
+         Buttons[11].GetComponent<MeshRenderer>().material = Colors[2];
+         Buttons[13].GetComponent<MeshRenderer>().material = Colors[2];
+         Buttons[16].GetComponent<MeshRenderer>().material = Colors[2];
+         Buttons[17].GetComponent<MeshRenderer>().material = Colors[2];
+         Buttons[10].GetComponent<MeshRenderer>().material = Colors[2];
+         Buttons[8].GetComponent<MeshRenderer>().material = Colors[2];
+         Buttons[5].GetComponent<MeshRenderer>().material = Colors[2];
+         Buttons[9].GetComponent<MeshRenderer>().material = Colors[2];
+         Buttons[4].GetComponent<MeshRenderer>().material = Colors[2];
+         yield return new WaitForSeconds(.3f);
       }
       GetComponent<KMBombModule>().HandlePass();
+      solved = true;
+      Buttons[5].GetComponent<MeshRenderer>().material = Colors[0];
+      yield return new WaitForSeconds(.1f);
+      Buttons[10].GetComponent<MeshRenderer>().material = Colors[0];
+      yield return new WaitForSeconds(.1f);
+      Buttons[11].GetComponent<MeshRenderer>().material = Colors[0];
+      yield return new WaitForSeconds(.1f);
+      Buttons[4].GetComponent<MeshRenderer>().material = Colors[0];
+      Buttons[8].GetComponent<MeshRenderer>().material = Colors[0];
+      Buttons[12].GetComponent<MeshRenderer>().material = Colors[0];
+      Buttons[16].GetComponent<MeshRenderer>().material = Colors[0];
+      yield return new WaitForSeconds(.1f);
+      Buttons[9].GetComponent<MeshRenderer>().material = Colors[0];
+      Buttons[13].GetComponent<MeshRenderer>().material = Colors[0];
+      Buttons[17].GetComponent<MeshRenderer>().material = Colors[0];
+      yield return new WaitForSeconds(.1f);
+      Animating = false;
    }
 
    void ArrowPress (KMSelectable Arrow) {
@@ -402,33 +455,71 @@ public class GameOfColors : MonoBehaviour {
    }
 
 #pragma warning disable 414
-   private readonly string TwitchHelpMessage = @"Use !{0} ABCDE/12345;KRGBCMYW to set that coordinate to that color. Chain coordinates with semicolons. Spaces are not permitted. Use !{0} Submit to submit";
+   private readonly string TwitchHelpMessage = @"Use !{0} KRGBCMYW ABCDE/12345 to select a color and press that coordinate, chain with spaces. Use !{0} Submit to submit";
 #pragma warning restore 414
 
-   IEnumerator ProcessTwitchCommand (string Command) {
-      Command = Command.Trim().ToUpper();
-      if (Command == "SUBMIT") {
+   private IEnumerator ProcessTwitchCommand (string command)
+   {
+      command = command.ToLowerInvariant().Trim();
+
+      if (command == "submit")
+      {
+         yield return null;
          Submit.OnInteract();
          yield break;
       }
-      string[] Parameters = Command.Split(';');
-      List<int> Valid = new List<int> { };
-      for (int i = 0; i < Parameters.Length - 1; i++) {
-         if ("KRGBCMY".Contains(Parameters[i])) {
-            for (int j = 0; j < Valid.Count(); j++) {
-               Buttons[j].OnInteract();
+
+      var m = tpRegex.Match(command);
+      if (m.Success)
+      {
+         yield return null;
+         var parts = m.Groups[0].ToString().Split(' ');
+         var selectables = new List<KMSelectable>();
+
+         foreach (var part in parts)
+         {
+            if (part.Length == 2)
+               selectables.Add(Buttons[(int.Parse(part[1].ToString()) - 1) * 5 + "abcde".IndexOf(part[0])]);
+            else
+            {
+               var targetColor = "wcmbygrk".IndexOf(part);
+               var difference = Math.Abs(targetColor - ColorIndex);
+               if(difference > (8 - difference))
+                        selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex < targetColor ? 1 : 0], 8 - difference));
+               else
+                        selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex > targetColor ? 1 : 0], difference));
             }
          }
-         else if (!"ABCDE".Contains(Parameters)) {
 
-         }
-
-         Valid.Add();
+         yield return selectables;
       }
-      yield return null;
    }
 
-   IEnumerator TwitchHandleForcedSolve () {
-      yield return null;
+   private IEnumerator TwitchHandleForcedSolve () {
+      while (Animating)
+         yield return true;
+      for (int i = 0; i < 25; i++)
+      {
+         if (Submission[i] != FinalAnswer[i])
+         {
+                var selectables = new List<KMSelectable>();
+                var difference = Math.Abs(FinalAnswer[i] - ColorIndex);
+                if (difference > (8 - difference))
+                    selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex < FinalAnswer[i] ? 1 : 0], 8 - difference));
+                else
+                    selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex > FinalAnswer[i] ? 1 : 0], difference));
+                foreach(var b in selectables)
+                {
+                    b.OnInteract();
+                    yield return new WaitForSeconds(.1f);
+                }
+
+            Buttons[i].OnInteract();
+            yield return new WaitForSeconds(.1f);
+         }
+      }
+      Submit.OnInteract();
+      while (!solved)
+         yield return true;
    }
 }
