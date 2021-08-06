@@ -484,8 +484,11 @@ public class GameOfColors : MonoBehaviour {
             else
             {
                var targetColor = "wcmbygrk".IndexOf(part);
-               var button = ColorIndex > targetColor ? 1 : 0;
-               selectables.AddRange(Enumerable.Repeat(Arrows[button], Math.Abs(targetColor - ColorIndex)));
+               var difference = Math.Abs(targetColor - ColorIndex);
+               if(difference > (8 - difference))
+                        selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex < targetColor ? 1 : 0], 8 - difference));
+               else
+                        selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex > targetColor ? 1 : 0], difference));
             }
          }
 
@@ -500,12 +503,17 @@ public class GameOfColors : MonoBehaviour {
       {
          if (Submission[i] != FinalAnswer[i])
          {
-            var button = ColorIndex > FinalAnswer[i] ? 1 : 0;
-            foreach (var b in Enumerable.Repeat(Arrows[button], Math.Abs(FinalAnswer[i] - ColorIndex)))
-            {
-               b.OnInteract();
-               yield return new WaitForSeconds(.1f);
-            }
+                var selectables = new List<KMSelectable>();
+                var difference = Math.Abs(FinalAnswer[i] - ColorIndex);
+                if (difference > (8 - difference))
+                    selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex < FinalAnswer[i] ? 1 : 0], 8 - difference));
+                else
+                    selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex > FinalAnswer[i] ? 1 : 0], difference));
+                foreach(var b in selectables)
+                {
+                    b.OnInteract();
+                    yield return new WaitForSeconds(.1f);
+                }
 
             Buttons[i].OnInteract();
             yield return new WaitForSeconds(.1f);
