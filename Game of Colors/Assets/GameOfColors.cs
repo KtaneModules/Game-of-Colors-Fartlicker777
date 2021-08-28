@@ -456,20 +456,35 @@ public class GameOfColors : MonoBehaviour {
 
          foreach (var part in parts)
          {
-            if (part.Length == 2)
-               selectables.Add(Buttons[(int.Parse(part[1].ToString()) - 1) * 5 + "abcde".IndexOf(part[0])]);
+                if (part.Length == 2)
+                {
+                    Buttons[(int.Parse(part[1].ToString()) - 1) * 5 + "abcde".IndexOf(part[0])].OnInteract();
+                    yield return new WaitForSeconds(.1f);
+                }
             else
             {
                var targetColor = "wcmbygrk".IndexOf(part);
                var difference = Math.Abs(targetColor - ColorIndex);
                if(difference > (8 - difference))
-                        selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex < targetColor ? 1 : 0], 8 - difference));
-               else
-                        selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex > targetColor ? 1 : 0], difference));
+                    {
+                        var correctButton = ColorIndex < targetColor ? 1 : 0;
+                        for (var i = 0; i < 8 - difference; ++i)
+                        {
+                            Arrows[correctButton].OnInteract();
+                            yield return new WaitForSeconds(.1f);
+                        }
+                    }
+                    else
+                    {
+                        var correctButton = ColorIndex > targetColor ? 1 : 0;
+                        for (var i = 0; i < difference; ++i)
+                        {
+                            Arrows[correctButton].OnInteract();
+                            yield return new WaitForSeconds(.1f);
+                        }
+                    }
             }
          }
-
-         yield return selectables;
       }
    }
 
@@ -483,14 +498,24 @@ public class GameOfColors : MonoBehaviour {
                 var selectables = new List<KMSelectable>();
                 var difference = Math.Abs(FinalAnswer[i] - ColorIndex);
                 if (difference > (8 - difference))
-                    selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex < FinalAnswer[i] ? 1 : 0], 8 - difference));
-                else
-                    selectables.AddRange(Enumerable.Repeat(Arrows[ColorIndex > FinalAnswer[i] ? 1 : 0], difference));
-                foreach(var b in selectables)
                 {
-                    b.OnInteract();
-                    yield return new WaitForSeconds(.1f);
+                    var correctButton = ColorIndex < FinalAnswer[i] ? 1 : 0;
+                    for (var j = 0; j < 8 - difference; ++j)
+                    {
+                        Arrows[correctButton].OnInteract();
+                        yield return new WaitForSeconds(.1f);
+                    }
                 }
+                else
+                {
+                    var correctButton = ColorIndex > FinalAnswer[i] ? 1 : 0;
+                    for (var j = 0; j < difference; ++j)
+                    {
+                        Arrows[correctButton].OnInteract();
+                        yield return new WaitForSeconds(.1f);
+                    }
+                }
+                    
 
             Buttons[i].OnInteract();
             yield return new WaitForSeconds(.1f);
