@@ -326,25 +326,25 @@ public class GameOfColors : MonoBehaviour {
       }
       //}
       for (int i = 0; i < 3; i++) {
-         Debug.LogFormat("[Game of Color #{0}] The grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][0] ? "*" : ".", GOLGrids[i][1] ? "*" : ".", GOLGrids[i][2] ? "*" : ".", GOLGrids[i][3] ? "*" : ".", GOLGrids[i][4] ? "*" : ".");
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][5] ? "*" : ".", GOLGrids[i][6] ? "*" : ".", GOLGrids[i][7] ? "*" : ".", GOLGrids[i][8] ? "*" : ".", GOLGrids[i][9] ? "*" : ".");
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][10] ? "*" : ".", GOLGrids[i][11] ? "*" : ".", GOLGrids[i][12] ? "*" : ".", GOLGrids[i][13] ? "*" : ".", GOLGrids[i][14] ? "*" : ".");
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][15] ? "*" : ".", GOLGrids[i][16] ? "*" : ".", GOLGrids[i][17] ? "*" : ".", GOLGrids[i][18] ? "*" : ".", GOLGrids[i][19] ? "*" : ".");
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][20] ? "*" : ".", GOLGrids[i][21] ? "*" : ".", GOLGrids[i][22] ? "*" : ".", GOLGrids[i][23] ? "*" : ".", GOLGrids[i][24] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] The grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][0] ? "*" : ".", GOLGrids[i][1] ? "*" : ".", GOLGrids[i][2] ? "*" : ".", GOLGrids[i][3] ? "*" : ".", GOLGrids[i][4] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][5] ? "*" : ".", GOLGrids[i][6] ? "*" : ".", GOLGrids[i][7] ? "*" : ".", GOLGrids[i][8] ? "*" : ".", GOLGrids[i][9] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][10] ? "*" : ".", GOLGrids[i][11] ? "*" : ".", GOLGrids[i][12] ? "*" : ".", GOLGrids[i][13] ? "*" : ".", GOLGrids[i][14] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][15] ? "*" : ".", GOLGrids[i][16] ? "*" : ".", GOLGrids[i][17] ? "*" : ".", GOLGrids[i][18] ? "*" : ".", GOLGrids[i][19] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][20] ? "*" : ".", GOLGrids[i][21] ? "*" : ".", GOLGrids[i][22] ? "*" : ".", GOLGrids[i][23] ? "*" : ".", GOLGrids[i][24] ? "*" : ".");
       }
       for (int i = 0; i < 3; i++) {
          GOLIteration(5, 5, i);
       }
       for (int i = 0; i < 3; i++) {
-         Debug.LogFormat("[Game of Color #{0}] The goal grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][0] ? "*" : ".", Goal[i][1] ? "*" : ".", Goal[i][2] ? "*" : ".", Goal[i][3] ? "*" : ".", Goal[i][4] ? "*" : ".");
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][5] ? "*" : ".", Goal[i][6] ? "*" : ".", Goal[i][7] ? "*" : ".", Goal[i][8] ? "*" : ".", Goal[i][9] ? "*" : ".");
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][10] ? "*" : ".", Goal[i][11] ? "*" : ".", Goal[i][12] ? "*" : ".", Goal[i][13] ? "*" : ".", Goal[i][14] ? "*" : ".");
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][15] ? "*" : ".", Goal[i][16] ? "*" : ".", Goal[i][17] ? "*" : ".", Goal[i][18] ? "*" : ".", Goal[i][19] ? "*" : ".");
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][20] ? "*" : ".", Goal[i][21] ? "*" : ".", Goal[i][22] ? "*" : ".", Goal[i][23] ? "*" : ".", Goal[i][24] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] The goal grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][0] ? "*" : ".", Goal[i][1] ? "*" : ".", Goal[i][2] ? "*" : ".", Goal[i][3] ? "*" : ".", Goal[i][4] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][5] ? "*" : ".", Goal[i][6] ? "*" : ".", Goal[i][7] ? "*" : ".", Goal[i][8] ? "*" : ".", Goal[i][9] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][10] ? "*" : ".", Goal[i][11] ? "*" : ".", Goal[i][12] ? "*" : ".", Goal[i][13] ? "*" : ".", Goal[i][14] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][15] ? "*" : ".", Goal[i][16] ? "*" : ".", Goal[i][17] ? "*" : ".", Goal[i][18] ? "*" : ".", Goal[i][19] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][20] ? "*" : ".", Goal[i][21] ? "*" : ".", Goal[i][22] ? "*" : ".", Goal[i][23] ? "*" : ".", Goal[i][24] ? "*" : ".");
       }
-      Debug.LogFormat("[Game of Color #{0}] The final answer is:", moduleId);
+      Debug.LogFormat("[Game of Colors #{0}] The final answer is:", moduleId);
       for (int i = 0; i < 25; i++) {
          for (int j = 0; j < 3; j++) {
             if (Goal[j][i]) {
@@ -353,18 +353,18 @@ public class GameOfColors : MonoBehaviour {
          }
       }
       //if (true) {
-      Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[0]], "KRGYBMCW"[7 - FinalAnswer[1]], "KRGYBMCW"[7 - FinalAnswer[2]], "KRGYBMCW"[7 - FinalAnswer[3]], "KRGYBMCW"[7 - FinalAnswer[4]]);
-      Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[5]], "KRGYBMCW"[7 - FinalAnswer[6]], "KRGYBMCW"[7 - FinalAnswer[7]], "KRGYBMCW"[7 - FinalAnswer[8]], "KRGYBMCW"[7 - FinalAnswer[9]]);
-      Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[10]], "KRGYBMCW"[7 - FinalAnswer[11]], "KRGYBMCW"[7 - FinalAnswer[12]], "KRGYBMCW"[7 - FinalAnswer[13]], "KRGYBMCW"[7 - FinalAnswer[14]]);
-      Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[15]], "KRGYBMCW"[7 - FinalAnswer[16]], "KRGYBMCW"[7 - FinalAnswer[17]], "KRGYBMCW"[7 - FinalAnswer[18]], "KRGYBMCW"[7 - FinalAnswer[19]]);
-      Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[20]], "KRGYBMCW"[7 - FinalAnswer[21]], "KRGYBMCW"[7 - FinalAnswer[22]], "KRGYBMCW"[7 - FinalAnswer[23]], "KRGYBMCW"[7 - FinalAnswer[24]]);
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[0]], "KRGYBMCW"[7 - FinalAnswer[1]], "KRGYBMCW"[7 - FinalAnswer[2]], "KRGYBMCW"[7 - FinalAnswer[3]], "KRGYBMCW"[7 - FinalAnswer[4]]);
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[5]], "KRGYBMCW"[7 - FinalAnswer[6]], "KRGYBMCW"[7 - FinalAnswer[7]], "KRGYBMCW"[7 - FinalAnswer[8]], "KRGYBMCW"[7 - FinalAnswer[9]]);
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[10]], "KRGYBMCW"[7 - FinalAnswer[11]], "KRGYBMCW"[7 - FinalAnswer[12]], "KRGYBMCW"[7 - FinalAnswer[13]], "KRGYBMCW"[7 - FinalAnswer[14]]);
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[15]], "KRGYBMCW"[7 - FinalAnswer[16]], "KRGYBMCW"[7 - FinalAnswer[17]], "KRGYBMCW"[7 - FinalAnswer[18]], "KRGYBMCW"[7 - FinalAnswer[19]]);
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[20]], "KRGYBMCW"[7 - FinalAnswer[21]], "KRGYBMCW"[7 - FinalAnswer[22]], "KRGYBMCW"[7 - FinalAnswer[23]], "KRGYBMCW"[7 - FinalAnswer[24]]);
       /*}
       else {
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[0]], "KRGYBMCW"[FinalAnswer[1]], "KRGYBMCW"[FinalAnswer[2]], "KRGYBMCW"[FinalAnswer[3]], "KRGYBMCW"[FinalAnswer[4]]);
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[5]], "KRGYBMCW"[FinalAnswer[6]], "KRGYBMCW"[FinalAnswer[7]], "KRGYBMCW"[FinalAnswer[8]], "KRGYBMCW"[FinalAnswer[9]]);
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[10]], "KRGYBMCW"[FinalAnswer[11]], "KRGYBMCW"[FinalAnswer[12]], "KRGYBMCW"[FinalAnswer[13]], "KRGYBMCW"[FinalAnswer[14]]);
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[15]], "KRGYBMCW"[FinalAnswer[16]], "KRGYBMCW"[FinalAnswer[17]], "KRGYBMCW"[FinalAnswer[18]], "KRGYBMCW"[FinalAnswer[19]]);
-         Debug.LogFormat("[Game of Color #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[20]], "KRGYBMCW"[FinalAnswer[21]], "KRGYBMCW"[FinalAnswer[22]], "KRGYBMCW"[FinalAnswer[23]], "KRGYBMCW"[FinalAnswer[24]]);
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[0]], "KRGYBMCW"[FinalAnswer[1]], "KRGYBMCW"[FinalAnswer[2]], "KRGYBMCW"[FinalAnswer[3]], "KRGYBMCW"[FinalAnswer[4]]);
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[5]], "KRGYBMCW"[FinalAnswer[6]], "KRGYBMCW"[FinalAnswer[7]], "KRGYBMCW"[FinalAnswer[8]], "KRGYBMCW"[FinalAnswer[9]]);
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[10]], "KRGYBMCW"[FinalAnswer[11]], "KRGYBMCW"[FinalAnswer[12]], "KRGYBMCW"[FinalAnswer[13]], "KRGYBMCW"[FinalAnswer[14]]);
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[15]], "KRGYBMCW"[FinalAnswer[16]], "KRGYBMCW"[FinalAnswer[17]], "KRGYBMCW"[FinalAnswer[18]], "KRGYBMCW"[FinalAnswer[19]]);
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[20]], "KRGYBMCW"[FinalAnswer[21]], "KRGYBMCW"[FinalAnswer[22]], "KRGYBMCW"[FinalAnswer[23]], "KRGYBMCW"[FinalAnswer[24]]);
       }*/
    }
 
