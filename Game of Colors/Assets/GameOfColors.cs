@@ -58,12 +58,15 @@ public class GameOfColors : MonoBehaviour {
 
       Submit.OnInteract += delegate () { SubmitPress(); return false; };
 
+      Debug.Log("Game of Colors V.1.1");
    }
 
    void SubmitPress () {
       if (moduleSolved) {
          return;
       }
+      List<string> WrongCoords = new List<string> { };
+      bool Wrong = false;
       //StartCoroutine(Solve());
       //return;
       for (int i = 0; i < 25; i++) {
@@ -71,11 +74,20 @@ public class GameOfColors : MonoBehaviour {
          //Debug.Log("submitted " + FinalAnswer[i].ToString());
          //Debug.Log("submitted " + Submission[i].ToString());
          if (FinalAnswer[i] != Submission[i]) {
-            StartCoroutine(Strike());
-            return;
+            WrongCoords.Add("ABCDE"[i % 5] + (i / 5 + 1).ToString());
+            Wrong = true;
          }
       }
-      StartCoroutine(Solve());
+      if (Wrong) {
+         Debug.Log("Wrong coords:");
+         for (int i = 0; i < WrongCoords.Count(); i++) {
+            Debug.Log(WrongCoords[i]);
+         }
+         StartCoroutine(Strike());
+      }
+      else {
+         StartCoroutine(Solve());
+      }
    }
 
    IEnumerator Strike ()
