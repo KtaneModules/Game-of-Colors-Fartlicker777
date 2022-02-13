@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using KModkit;
 using Rnd = UnityEngine.Random;
 
 public class GameOfColors : MonoBehaviour {
@@ -25,7 +24,7 @@ public class GameOfColors : MonoBehaviour {
 
    readonly int[] Grid = new int[25];
 
-   readonly bool[][] GOLGrids = new bool[][] {
+   readonly bool[][] GOLGrids = new bool[][] {  //Initial grids, order of CMY
       new bool[25],
       new bool[25],
       new bool[25]
@@ -37,10 +36,9 @@ public class GameOfColors : MonoBehaviour {
       new bool[25]
    };
 
-   readonly int[] FinalAnswer = new int[25];
-   readonly int[] Submission = new int[25];
+   readonly int[] FinalAnswer = new int[25]; //Answer that you want to submit
+   readonly int[] Submission = new int[25];  //Answer that it reads
    int ColorIndex;
-   //bool CMYK;
    bool Animating;
 
    private static readonly Regex tpRegex = new Regex("^((([abcde][12345])|[krgbcmyw])( |$))+$");
@@ -61,18 +59,18 @@ public class GameOfColors : MonoBehaviour {
       Debug.Log("Game of Colors V.1.1");
    }
 
+   #region Buttons
+
    void SubmitPress () {
       if (moduleSolved) {
          return;
       }
+
+      //Checks for all wrong coordinates and puts them in a list.
+
       List<string> WrongCoords = new List<string> { };
       bool Wrong = false;
-      //StartCoroutine(Solve());
-      //return;
       for (int i = 0; i < 25; i++) {
-         //Debug.Log(i.ToString() + " is ");
-         //Debug.Log("submitted " + FinalAnswer[i].ToString());
-         //Debug.Log("submitted " + Submission[i].ToString());
          if (FinalAnswer[i] != Submission[i]) {
             WrongCoords.Add("ABCDE"[i % 5] + (i / 5 + 1).ToString());
             Wrong = true;
@@ -90,8 +88,36 @@ public class GameOfColors : MonoBehaviour {
       }
    }
 
-   IEnumerator Strike ()
-   {
+   void ArrowPress (KMSelectable Arrow) {
+      Audio.PlaySoundAtTransform("ChangeColor", transform);
+      if (Arrow == Arrows[0]) {
+         ColorIndex++;
+         ColorIndex %= 8;
+      }
+      else {
+         ColorIndex--;
+         if (ColorIndex < 0) {
+            ColorIndex += 8;
+         }
+      }
+      ColorIndicator.GetComponent<MeshRenderer>().material = Colors[7 - ColorIndex]; //7 - CI because originally also had RGB, meaning that Unity has it ordered RGB, I never bothered to fix this
+   }
+
+   void ButtonPress (KMSelectable Button) {
+      Audio.PlaySoundAtTransform("Boop", transform);
+      for (int i = 0; i < 25; i++) {
+         if (Button == Buttons[i]) {
+            Submission[i] = ColorIndex;
+            Button.GetComponent<MeshRenderer>().material = Colors[7 - ColorIndex];
+         }
+      }
+   }
+
+   #endregion
+
+   #region Animations
+
+   IEnumerator Strike () {
       Animating = true;
       StartCoroutine(Clear());
       yield return new WaitForSeconds(1f);
@@ -279,64 +305,41 @@ public class GameOfColors : MonoBehaviour {
       Buttons[10].GetComponent<MeshRenderer>().material = Colors[2];
       Audio.PlaySoundAtTransform("Solve", transform);
       yield return new WaitForSeconds(.3f);
-      
+
       GetComponent<KMBombModule>().HandlePass();
       StartCoroutine(Clear());
       moduleSolved = true;
       Animating = false;
    }
 
-   void ArrowPress (KMSelectable Arrow) {
-      Audio.PlaySoundAtTransform("ChangeColor", transform);
-      if (Arrow == Arrows[0]) {
-         ColorIndex++;
-         ColorIndex %= 8;
-      }
-      else {
-         ColorIndex--;
-         if (ColorIndex < 0) {
-            ColorIndex += 8;
-         }
-      }
-      ColorIndicator.GetComponent<MeshRenderer>().material = Colors[7 - ColorIndex];
-      /*if (CMYK) {
-         
-      }
-      else {
-         ColorIndicator.GetComponent<MeshRenderer>().material = Colors[ColorIndex];
-      }*/
-
-   }
+   #endregion
 
    void Start () { //K R G Y B M C W
+
+      //Represent each square via binary as seen right above
+
       for (int i = 0; i < 25; i++) {
-         if (Rnd.Range(0, 5) < 2) { // Red/Cyan
+         if (Rnd.Range(0, 5) < 2) { // Cyan
             GOLGrids[0][i] = true;
             Grid[i]++;
          }
-         if (Rnd.Range(0, 5) < 2) { // Green/Magenta
+         if (Rnd.Range(0, 5) < 2) { // Magenta
             GOLGrids[1][i] = true;
             Grid[i] += 2;
          }
-         if (Rnd.Range(0, 5) < 2) { // Blue/Yellow
+         if (Rnd.Range(0, 5) < 2) { // Yellow
             GOLGrids[2][i] = true;
             Grid[i] += 4;
          }
          Submission[i] = Grid[i];
       }
-      /*if (Rnd.Range(0, 2) == 0) {
-         for (int i = 0; i < 25; i++) {
-            Buttons[i].GetComponent<MeshRenderer>().material = Colors[Grid[i]];
-         }
-         ColorIndicator.GetComponent<MeshRenderer>().material = Colors[0];
-      }*/
-      //else {
-      //CMYK = true;
       ColorIndicator.GetComponent<MeshRenderer>().material = Colors[7];
       for (int i = 0; i < 25; i++) {
          Buttons[i].GetComponent<MeshRenderer>().material = Colors[7 - Grid[i]];
       }
-      //}
+
+      //Casual logging
+
       for (int i = 0; i < 3; i++) {
          Debug.LogFormat("[Game of Colors #{0}] The grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
          Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][0] ? "*" : ".", GOLGrids[i][1] ? "*" : ".", GOLGrids[i][2] ? "*" : ".", GOLGrids[i][3] ? "*" : ".", GOLGrids[i][4] ? "*" : ".");
@@ -364,35 +367,11 @@ public class GameOfColors : MonoBehaviour {
             }
          }
       }
-      //if (true) {
       Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[0]], "KRGYBMCW"[7 - FinalAnswer[1]], "KRGYBMCW"[7 - FinalAnswer[2]], "KRGYBMCW"[7 - FinalAnswer[3]], "KRGYBMCW"[7 - FinalAnswer[4]]);
       Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[5]], "KRGYBMCW"[7 - FinalAnswer[6]], "KRGYBMCW"[7 - FinalAnswer[7]], "KRGYBMCW"[7 - FinalAnswer[8]], "KRGYBMCW"[7 - FinalAnswer[9]]);
       Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[10]], "KRGYBMCW"[7 - FinalAnswer[11]], "KRGYBMCW"[7 - FinalAnswer[12]], "KRGYBMCW"[7 - FinalAnswer[13]], "KRGYBMCW"[7 - FinalAnswer[14]]);
       Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[15]], "KRGYBMCW"[7 - FinalAnswer[16]], "KRGYBMCW"[7 - FinalAnswer[17]], "KRGYBMCW"[7 - FinalAnswer[18]], "KRGYBMCW"[7 - FinalAnswer[19]]);
       Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[20]], "KRGYBMCW"[7 - FinalAnswer[21]], "KRGYBMCW"[7 - FinalAnswer[22]], "KRGYBMCW"[7 - FinalAnswer[23]], "KRGYBMCW"[7 - FinalAnswer[24]]);
-      /*}
-      else {
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[0]], "KRGYBMCW"[FinalAnswer[1]], "KRGYBMCW"[FinalAnswer[2]], "KRGYBMCW"[FinalAnswer[3]], "KRGYBMCW"[FinalAnswer[4]]);
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[5]], "KRGYBMCW"[FinalAnswer[6]], "KRGYBMCW"[FinalAnswer[7]], "KRGYBMCW"[FinalAnswer[8]], "KRGYBMCW"[FinalAnswer[9]]);
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[10]], "KRGYBMCW"[FinalAnswer[11]], "KRGYBMCW"[FinalAnswer[12]], "KRGYBMCW"[FinalAnswer[13]], "KRGYBMCW"[FinalAnswer[14]]);
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[15]], "KRGYBMCW"[FinalAnswer[16]], "KRGYBMCW"[FinalAnswer[17]], "KRGYBMCW"[FinalAnswer[18]], "KRGYBMCW"[FinalAnswer[19]]);
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[FinalAnswer[20]], "KRGYBMCW"[FinalAnswer[21]], "KRGYBMCW"[FinalAnswer[22]], "KRGYBMCW"[FinalAnswer[23]], "KRGYBMCW"[FinalAnswer[24]]);
-      }*/
-   }
-
-   void ButtonPress (KMSelectable Button) {
-      Audio.PlaySoundAtTransform("Boop", transform);
-      for (int i = 0; i < 25; i++) {
-         if (Button == Buttons[i]) {
-            Submission[i] = ColorIndex;
-            //if (CMYK) {
-            Button.GetComponent<MeshRenderer>().material = Colors[7 - ColorIndex];
-            //}
-            //else {
-            //   Button.GetComponent<MeshRenderer>().material = Colors[ColorIndex];
-            //}
-         }
-      }
    }
 
    void GOLIteration (int Width, int Height, int Color) {
@@ -444,97 +423,84 @@ public class GameOfColors : MonoBehaviour {
       }
    }
 
+   #region Twitch Plays
+
 #pragma warning disable 414
    private readonly string TwitchHelpMessage = @"Use !{0} KRGBCMYW ABCDE/12345 to select a color and press that coordinate, chain with spaces. Use !{0} Submit to submit";
 #pragma warning restore 414
 
-   private IEnumerator ProcessTwitchCommand (string command)
-   {
+   private IEnumerator ProcessTwitchCommand (string command) {
       command = command.ToLowerInvariant().Trim();
 
-      if (command == "submit")
-      {
+      if (command == "submit") {
          yield return null;
          Submit.OnInteract();
          yield break;
       }
 
       var m = tpRegex.Match(command);
-      if (m.Success)
-      {
+      if (m.Success) {
          yield return null;
          var parts = m.Groups[0].ToString().Split(' ');
          var selectables = new List<KMSelectable>();
 
-         foreach (var part in parts)
-         {
-                if (part.Length == 2)
-                {
-                    Buttons[(int.Parse(part[1].ToString()) - 1) * 5 + "abcde".IndexOf(part[0])].OnInteract();
-                    yield return new WaitForSeconds(.1f);
-                }
-            else
-            {
+         foreach (var part in parts) {
+            if (part.Length == 2) {
+               Buttons[(int.Parse(part[1].ToString()) - 1) * 5 + "abcde".IndexOf(part[0])].OnInteract();
+               yield return new WaitForSeconds(.1f);
+            }
+            else {
                var targetColor = "wcmbygrk".IndexOf(part);
                var difference = Math.Abs(targetColor - ColorIndex);
-               if(difference > (8 - difference))
-                    {
-                        var correctButton = ColorIndex < targetColor ? 1 : 0;
-                        for (var i = 0; i < 8 - difference; ++i)
-                        {
-                            Arrows[correctButton].OnInteract();
-                            yield return new WaitForSeconds(.1f);
-                        }
-                    }
-                    else
-                    {
-                        var correctButton = ColorIndex > targetColor ? 1 : 0;
-                        for (var i = 0; i < difference; ++i)
-                        {
-                            Arrows[correctButton].OnInteract();
-                            yield return new WaitForSeconds(.1f);
-                        }
-                    }
+               if (difference > (8 - difference)) {
+                  var correctButton = ColorIndex < targetColor ? 1 : 0;
+                  for (var i = 0; i < 8 - difference; ++i) {
+                     Arrows[correctButton].OnInteract();
+                     yield return new WaitForSeconds(.1f);
+                  }
+               }
+               else {
+                  var correctButton = ColorIndex > targetColor ? 1 : 0;
+                  for (var i = 0; i < difference; ++i) {
+                     Arrows[correctButton].OnInteract();
+                     yield return new WaitForSeconds(.1f);
+                  }
+               }
             }
          }
       }
    }
 
    private IEnumerator TwitchHandleForcedSolve () {
-      while (Animating)
+      while (Animating) {
          yield return true;
-      for (int i = 0; i < 25; i++)
-      {
-         if (Submission[i] != FinalAnswer[i])
-         {
-                var selectables = new List<KMSelectable>();
-                var difference = Math.Abs(FinalAnswer[i] - ColorIndex);
-                if (difference > (8 - difference))
-                {
-                    var correctButton = ColorIndex < FinalAnswer[i] ? 1 : 0;
-                    for (var j = 0; j < 8 - difference; ++j)
-                    {
-                        Arrows[correctButton].OnInteract();
-                        yield return new WaitForSeconds(.1f);
-                    }
-                }
-                else
-                {
-                    var correctButton = ColorIndex > FinalAnswer[i] ? 1 : 0;
-                    for (var j = 0; j < difference; ++j)
-                    {
-                        Arrows[correctButton].OnInteract();
-                        yield return new WaitForSeconds(.1f);
-                    }
-                }
-                    
-
+      }
+      for (int i = 0; i < 25; i++) {
+         if (Submission[i] != FinalAnswer[i]) {
+            var selectables = new List<KMSelectable>();
+            var difference = Math.Abs(FinalAnswer[i] - ColorIndex);
+            if (difference > (8 - difference)) {
+               var correctButton = ColorIndex < FinalAnswer[i] ? 1 : 0;
+               for (var j = 0; j < 8 - difference; ++j) {
+                  Arrows[correctButton].OnInteract();
+                  yield return new WaitForSeconds(.1f);
+               }
+            }
+            else {
+               var correctButton = ColorIndex > FinalAnswer[i] ? 1 : 0;
+               for (var j = 0; j < difference; ++j) {
+                  Arrows[correctButton].OnInteract();
+                  yield return new WaitForSeconds(.1f);
+               }
+            }
             Buttons[i].OnInteract();
             yield return new WaitForSeconds(.1f);
          }
       }
       Submit.OnInteract();
-      while (!moduleSolved)
+      while (!moduleSolved) {
          yield return true;
+      }
    }
+   #endregion
 }
