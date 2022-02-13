@@ -115,6 +115,115 @@ public class GameOfColors : MonoBehaviour {
 
    #endregion
 
+   void Start () { //K R G Y B M C W
+
+      //Represent each square via binary as seen right above
+
+      for (int i = 0; i < 25; i++) {
+         if (Rnd.Range(0, 5) < 2) { // Cyan
+            GOLGrids[0][i] = true;
+            Grid[i]++;
+         }
+         if (Rnd.Range(0, 5) < 2) { // Magenta
+            GOLGrids[1][i] = true;
+            Grid[i] += 2;
+         }
+         if (Rnd.Range(0, 5) < 2) { // Yellow
+            GOLGrids[2][i] = true;
+            Grid[i] += 4;
+         }
+         Submission[i] = Grid[i];
+      }
+      ColorIndicator.GetComponent<MeshRenderer>().material = Colors[7];
+      for (int i = 0; i < 25; i++) {
+         Buttons[i].GetComponent<MeshRenderer>().material = Colors[7 - Grid[i]];
+      }
+
+      //Casual logging
+
+      for (int i = 0; i < 3; i++) {
+         Debug.LogFormat("[Game of Colors #{0}] The grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][0] ? "*" : ".", GOLGrids[i][1] ? "*" : ".", GOLGrids[i][2] ? "*" : ".", GOLGrids[i][3] ? "*" : ".", GOLGrids[i][4] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][5] ? "*" : ".", GOLGrids[i][6] ? "*" : ".", GOLGrids[i][7] ? "*" : ".", GOLGrids[i][8] ? "*" : ".", GOLGrids[i][9] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][10] ? "*" : ".", GOLGrids[i][11] ? "*" : ".", GOLGrids[i][12] ? "*" : ".", GOLGrids[i][13] ? "*" : ".", GOLGrids[i][14] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][15] ? "*" : ".", GOLGrids[i][16] ? "*" : ".", GOLGrids[i][17] ? "*" : ".", GOLGrids[i][18] ? "*" : ".", GOLGrids[i][19] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][20] ? "*" : ".", GOLGrids[i][21] ? "*" : ".", GOLGrids[i][22] ? "*" : ".", GOLGrids[i][23] ? "*" : ".", GOLGrids[i][24] ? "*" : ".");
+      }
+      for (int i = 0; i < 3; i++) {
+         GOLIteration(5, 5, i);
+      }
+      for (int i = 0; i < 3; i++) {
+         Debug.LogFormat("[Game of Colors #{0}] The goal grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][0] ? "*" : ".", Goal[i][1] ? "*" : ".", Goal[i][2] ? "*" : ".", Goal[i][3] ? "*" : ".", Goal[i][4] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][5] ? "*" : ".", Goal[i][6] ? "*" : ".", Goal[i][7] ? "*" : ".", Goal[i][8] ? "*" : ".", Goal[i][9] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][10] ? "*" : ".", Goal[i][11] ? "*" : ".", Goal[i][12] ? "*" : ".", Goal[i][13] ? "*" : ".", Goal[i][14] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][15] ? "*" : ".", Goal[i][16] ? "*" : ".", Goal[i][17] ? "*" : ".", Goal[i][18] ? "*" : ".", Goal[i][19] ? "*" : ".");
+         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][20] ? "*" : ".", Goal[i][21] ? "*" : ".", Goal[i][22] ? "*" : ".", Goal[i][23] ? "*" : ".", Goal[i][24] ? "*" : ".");
+      }
+      Debug.LogFormat("[Game of Colors #{0}] The final answer is:", moduleId);
+      for (int i = 0; i < 25; i++) {
+         for (int j = 0; j < 3; j++) {
+            if (Goal[j][i]) {
+               FinalAnswer[i] += (int) Math.Pow(2, j);
+            }
+         }
+      }
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[0]], "KRGYBMCW"[7 - FinalAnswer[1]], "KRGYBMCW"[7 - FinalAnswer[2]], "KRGYBMCW"[7 - FinalAnswer[3]], "KRGYBMCW"[7 - FinalAnswer[4]]);
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[5]], "KRGYBMCW"[7 - FinalAnswer[6]], "KRGYBMCW"[7 - FinalAnswer[7]], "KRGYBMCW"[7 - FinalAnswer[8]], "KRGYBMCW"[7 - FinalAnswer[9]]);
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[10]], "KRGYBMCW"[7 - FinalAnswer[11]], "KRGYBMCW"[7 - FinalAnswer[12]], "KRGYBMCW"[7 - FinalAnswer[13]], "KRGYBMCW"[7 - FinalAnswer[14]]);
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[15]], "KRGYBMCW"[7 - FinalAnswer[16]], "KRGYBMCW"[7 - FinalAnswer[17]], "KRGYBMCW"[7 - FinalAnswer[18]], "KRGYBMCW"[7 - FinalAnswer[19]]);
+      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[20]], "KRGYBMCW"[7 - FinalAnswer[21]], "KRGYBMCW"[7 - FinalAnswer[22]], "KRGYBMCW"[7 - FinalAnswer[23]], "KRGYBMCW"[7 - FinalAnswer[24]]);
+   }
+
+   void GOLIteration (int Width, int Height, int Color) {
+      int WhiteSquares = 0;
+      for (int i = 0; i < Width * Height; i++) {
+         //Debug.Log(i);
+         if (i == 0) { //TL
+            WhiteSquares += (GOLGrids[Color][i + 1] ? 1 : 0) + (GOLGrids[Color][i + 1 + Width] ? 1 : 0) + (GOLGrids[Color][Width] ? 1 : 0);
+         }
+         else if (i / Width == 0 && i % Height == Height - 1) { //TR
+            WhiteSquares += (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0);
+         }
+         else if (i == Width * Height - 1) {//BR
+            WhiteSquares += (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - Width] ? 1 : 0);
+         }
+         else if (i == Width * (Height - 1)) {//BL
+            WhiteSquares += (GOLGrids[Color][i + 1] ? 1 : 0) + (GOLGrids[Color][i + 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - Width] ? 1 : 0);
+         }
+         else if (i / Width == 0) {//Top row
+            WhiteSquares += (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0) + (GOLGrids[Color][i + Width + 1] ? 1 : 0) + (GOLGrids[Color][i + 1] ? 1 : 0);
+         }
+         else if (i % Height == 0) {//Left column
+            WhiteSquares += (GOLGrids[Color][i - Width] ? 1 : 0) + (GOLGrids[Color][i + 1 - Width] ? 1 : 0) + (GOLGrids[Color][i + 1] ? 1 : 0) + (GOLGrids[Color][i + 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0);
+         }
+         else if (i % Height == Height - 1) {//Right Column
+            WhiteSquares += (GOLGrids[Color][i - Width] ? 1 : 0) + (GOLGrids[Color][i - 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0);
+         }
+         else if (i / Width == Width - 1) { //Bottom row
+            WhiteSquares += (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - Width] ? 1 : 0) + (GOLGrids[Color][i + 1 - Width] ? 1 : 0) + (GOLGrids[Color][i + 1] ? 1 : 0);
+         }
+         else {//Middle
+            WhiteSquares += (GOLGrids[Color][i - 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - Width] ? 1 : 0) + (GOLGrids[Color][i + 1 - Width] ? 1 : 0) + (GOLGrids[Color][i + 1] ? 1 : 0) + (GOLGrids[Color][i + 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0) + (GOLGrids[Color][i - 1 + Width] ? 1 : 0) + (GOLGrids[Color][i - 1] ? 1 : 0);
+         }
+         if (GOLGrids[Color][i]) {
+            if (WhiteSquares == 2 || WhiteSquares == 3) {
+               Goal[Color][i] = true;
+            }
+            else {
+               Goal[Color][i] = false;
+            }
+         }
+         else if (WhiteSquares == 3) {
+            Goal[Color][i] = true;
+         }
+         else {
+            Goal[Color][i] = false;
+         }
+         WhiteSquares = 0;
+      }
+   }
+
    #region Animations
 
    IEnumerator Strike () {
@@ -313,115 +422,6 @@ public class GameOfColors : MonoBehaviour {
    }
 
    #endregion
-
-   void Start () { //K R G Y B M C W
-
-      //Represent each square via binary as seen right above
-
-      for (int i = 0; i < 25; i++) {
-         if (Rnd.Range(0, 5) < 2) { // Cyan
-            GOLGrids[0][i] = true;
-            Grid[i]++;
-         }
-         if (Rnd.Range(0, 5) < 2) { // Magenta
-            GOLGrids[1][i] = true;
-            Grid[i] += 2;
-         }
-         if (Rnd.Range(0, 5) < 2) { // Yellow
-            GOLGrids[2][i] = true;
-            Grid[i] += 4;
-         }
-         Submission[i] = Grid[i];
-      }
-      ColorIndicator.GetComponent<MeshRenderer>().material = Colors[7];
-      for (int i = 0; i < 25; i++) {
-         Buttons[i].GetComponent<MeshRenderer>().material = Colors[7 - Grid[i]];
-      }
-
-      //Casual logging
-
-      for (int i = 0; i < 3; i++) {
-         Debug.LogFormat("[Game of Colors #{0}] The grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][0] ? "*" : ".", GOLGrids[i][1] ? "*" : ".", GOLGrids[i][2] ? "*" : ".", GOLGrids[i][3] ? "*" : ".", GOLGrids[i][4] ? "*" : ".");
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][5] ? "*" : ".", GOLGrids[i][6] ? "*" : ".", GOLGrids[i][7] ? "*" : ".", GOLGrids[i][8] ? "*" : ".", GOLGrids[i][9] ? "*" : ".");
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][10] ? "*" : ".", GOLGrids[i][11] ? "*" : ".", GOLGrids[i][12] ? "*" : ".", GOLGrids[i][13] ? "*" : ".", GOLGrids[i][14] ? "*" : ".");
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][15] ? "*" : ".", GOLGrids[i][16] ? "*" : ".", GOLGrids[i][17] ? "*" : ".", GOLGrids[i][18] ? "*" : ".", GOLGrids[i][19] ? "*" : ".");
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, GOLGrids[i][20] ? "*" : ".", GOLGrids[i][21] ? "*" : ".", GOLGrids[i][22] ? "*" : ".", GOLGrids[i][23] ? "*" : ".", GOLGrids[i][24] ? "*" : ".");
-      }
-      for (int i = 0; i < 3; i++) {
-         GOLIteration(5, 5, i);
-      }
-      for (int i = 0; i < 3; i++) {
-         Debug.LogFormat("[Game of Colors #{0}] The goal grid for {1} is:", moduleId, false ? new string[] { "red", "green", "blue" }[i] : new string[] { "cyan", "magenta", "yellow" }[i]);
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][0] ? "*" : ".", Goal[i][1] ? "*" : ".", Goal[i][2] ? "*" : ".", Goal[i][3] ? "*" : ".", Goal[i][4] ? "*" : ".");
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][5] ? "*" : ".", Goal[i][6] ? "*" : ".", Goal[i][7] ? "*" : ".", Goal[i][8] ? "*" : ".", Goal[i][9] ? "*" : ".");
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][10] ? "*" : ".", Goal[i][11] ? "*" : ".", Goal[i][12] ? "*" : ".", Goal[i][13] ? "*" : ".", Goal[i][14] ? "*" : ".");
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][15] ? "*" : ".", Goal[i][16] ? "*" : ".", Goal[i][17] ? "*" : ".", Goal[i][18] ? "*" : ".", Goal[i][19] ? "*" : ".");
-         Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, Goal[i][20] ? "*" : ".", Goal[i][21] ? "*" : ".", Goal[i][22] ? "*" : ".", Goal[i][23] ? "*" : ".", Goal[i][24] ? "*" : ".");
-      }
-      Debug.LogFormat("[Game of Colors #{0}] The final answer is:", moduleId);
-      for (int i = 0; i < 25; i++) {
-         for (int j = 0; j < 3; j++) {
-            if (Goal[j][i]) {
-               FinalAnswer[i] += (int) Math.Pow(2, j);
-            }
-         }
-      }
-      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[0]], "KRGYBMCW"[7 - FinalAnswer[1]], "KRGYBMCW"[7 - FinalAnswer[2]], "KRGYBMCW"[7 - FinalAnswer[3]], "KRGYBMCW"[7 - FinalAnswer[4]]);
-      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[5]], "KRGYBMCW"[7 - FinalAnswer[6]], "KRGYBMCW"[7 - FinalAnswer[7]], "KRGYBMCW"[7 - FinalAnswer[8]], "KRGYBMCW"[7 - FinalAnswer[9]]);
-      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[10]], "KRGYBMCW"[7 - FinalAnswer[11]], "KRGYBMCW"[7 - FinalAnswer[12]], "KRGYBMCW"[7 - FinalAnswer[13]], "KRGYBMCW"[7 - FinalAnswer[14]]);
-      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[15]], "KRGYBMCW"[7 - FinalAnswer[16]], "KRGYBMCW"[7 - FinalAnswer[17]], "KRGYBMCW"[7 - FinalAnswer[18]], "KRGYBMCW"[7 - FinalAnswer[19]]);
-      Debug.LogFormat("[Game of Colors #{0}] {1}{2}{3}{4}{5}", moduleId, "KRGYBMCW"[7 - FinalAnswer[20]], "KRGYBMCW"[7 - FinalAnswer[21]], "KRGYBMCW"[7 - FinalAnswer[22]], "KRGYBMCW"[7 - FinalAnswer[23]], "KRGYBMCW"[7 - FinalAnswer[24]]);
-   }
-
-   void GOLIteration (int Width, int Height, int Color) {
-      int WhiteSquares = 0;
-      for (int i = 0; i < Width * Height; i++) {
-         //Debug.Log(i);
-         if (i == 0) { //TL
-            WhiteSquares += (GOLGrids[Color][i + 1] ? 1 : 0) + (GOLGrids[Color][i + 1 + Width] ? 1 : 0) + (GOLGrids[Color][Width] ? 1 : 0);
-         }
-         else if (i / Width == 0 && i % Height == Height - 1) { //TR
-            WhiteSquares += (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0);
-         }
-         else if (i == Width * Height - 1) {//BR
-            WhiteSquares += (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - Width] ? 1 : 0);
-         }
-         else if (i == Width * (Height - 1)) {//BL
-            WhiteSquares += (GOLGrids[Color][i + 1] ? 1 : 0) + (GOLGrids[Color][i + 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - Width] ? 1 : 0);
-         }
-         else if (i / Width == 0) {//Top row
-            WhiteSquares += (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0) + (GOLGrids[Color][i + Width + 1] ? 1 : 0) + (GOLGrids[Color][i + 1] ? 1 : 0);
-         }
-         else if (i % Height == 0) {//Left column
-            WhiteSquares += (GOLGrids[Color][i - Width] ? 1 : 0) + (GOLGrids[Color][i + 1 - Width] ? 1 : 0) + (GOLGrids[Color][i + 1] ? 1 : 0) + (GOLGrids[Color][i + 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0);
-         }
-         else if (i % Height == Height - 1) {//Right Column
-            WhiteSquares += (GOLGrids[Color][i - Width] ? 1 : 0) + (GOLGrids[Color][i - 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0);
-         }
-         else if (i / Width == Width - 1) { //Bottom row
-            WhiteSquares += (GOLGrids[Color][i - 1] ? 1 : 0) + (GOLGrids[Color][i - 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - Width] ? 1 : 0) + (GOLGrids[Color][i + 1 - Width] ? 1 : 0) + (GOLGrids[Color][i + 1] ? 1 : 0);
-         }
-         else {//Middle
-            WhiteSquares += (GOLGrids[Color][i - 1 - Width] ? 1 : 0) + (GOLGrids[Color][i - Width] ? 1 : 0) + (GOLGrids[Color][i + 1 - Width] ? 1 : 0) + (GOLGrids[Color][i + 1] ? 1 : 0) + (GOLGrids[Color][i + 1 + Width] ? 1 : 0) + (GOLGrids[Color][i + Width] ? 1 : 0) + (GOLGrids[Color][i - 1 + Width] ? 1 : 0) + (GOLGrids[Color][i - 1] ? 1 : 0);
-         }
-         if (GOLGrids[Color][i]) {
-            if (WhiteSquares == 2 || WhiteSquares == 3) {
-               Goal[Color][i] = true;
-            }
-            else {
-               Goal[Color][i] = false;
-            }
-         }
-         else if (WhiteSquares == 3) {
-            Goal[Color][i] = true;
-         }
-         else {
-            Goal[Color][i] = false;
-         }
-         WhiteSquares = 0;
-      }
-   }
 
    #region Twitch Plays
 
