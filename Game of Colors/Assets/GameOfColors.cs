@@ -287,6 +287,9 @@ public class GameOfColors : MonoBehaviour {
 
       }
       GetComponent<KMBombModule>().HandleStrike();
+      for (int i = 0; i < 25; i++) {
+         Submission[i] = Grid[i];
+      }
       Buttons[0].GetComponent<MeshRenderer>().material = Colors[0];
       yield return new WaitForSeconds(.1f);
       Buttons[1].GetComponent<MeshRenderer>().material = Colors[0];
